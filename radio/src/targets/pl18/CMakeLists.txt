@@ -75,6 +75,9 @@ elseif(PCBREV STREQUAL NV14)
     set(USE_VS1053B ON)
     set(AFHDS2 ON)
     set(AFHDS3 ON)
+    set(BLUETOOTH ON)
+    add_definitions(-DBLE_BAUDRATE=9600)
+    add_definitions(-DNV14_BLE=ON)
 
     # defines existing internal modules
     set(INTERNAL_MODULES AFHDS2A CACHE STRING "Internal modules")
@@ -111,6 +114,7 @@ else()
   set(INTERNAL_MODULES MULTI CACHE STRING "Internal modules")
   set(DEFAULT_INTERNAL_MODULE MULTIMODULE CACHE STRING "Default internal module")
 endif()
+
 
 set(BITMAPS_TARGET bm480_bitmaps)
 set(FONTS_TARGET x12_fonts)
@@ -183,6 +187,12 @@ set(BOARD_COMMON_SRC
 if(ROTARY_ENCODER)
   set(BOARD_COMMON_SRC ${BOARD_COMMON_SRC}
     targets/common/arm/stm32/rotary_encoder_driver.cpp
+  )
+endif()
+
+if(BLUETOOTH)
+  list(APPEND BOARD_COMMON_SRC
+    targets/common/arm/stm32/bluetooth_driver.cpp
   )
 endif()
 

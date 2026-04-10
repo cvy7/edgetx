@@ -388,7 +388,50 @@ void Bluetooth::wakeup(void)
   }
 #endif
 }
-#else // PCBX9E
+#elif defined NV14_BLE
+void Bluetooth::wakeup()
+{
+    if (state != BLUETOOTH_STATE_OFF) {
+      if (bluetoothIsWriting()) {
+        return;
+      }
+    }
+
+    tmr10ms_t now = get_tmr10ms();
+    if (now < wakeupTime)
+      return;
+
+    wakeupTime = now + 5; /* 50ms default */
+
+    if (state == BLUETOOTH_STATE_FLASH_FIRMWARE) {
+      return;
+    }
+    if (g_eeGeneral.bluetoothMode == BLUETOOTH_OFF ||
+        (g_eeGeneral.bluetoothMode == BLUETOOTH_TRAINER &&
+         !IS_BLUETOOTH_TRAINER())) {
+
+      if (state != BLUETOOTH_STATE_OFF) {
+        bluetoothDisable();
+        state = BLUETOOTH_STATE_OFF;
+    #if defined(DEBUG_BLUETOOTH)
+        BLUETOOTH_TRACE_TIMESTAMP();
+        BLUETOOTH_TRACE("BT_disable");
+        BLUETOOTH_TRACE(CRLF);
+    #endif
+      }
+      wakeupTime = now + 10; /* 100ms */
+    }
+    else if (state == BLUETOOTH_STATE_OFF) {
+        bluetoothInit(BLE_BAUDRATE, true);
+        state = BLUETOOTH_STATE_CONNECTED;
+    #if defined(DEBUG_BLUETOOTH)
+        BLUETOOTH_TRACE_TIMESTAMP();
+        BLUETOOTH_TRACE("BT_Init %d %d", BLE_BAUDRATE,1);
+        BLUETOOTH_TRACE(CRLF);
+    #endif
+      }
+}
+#else// PCBX9E
 void Bluetooth::wakeup()
 {
   if (state != BLUETOOTH_STATE_OFF) {
@@ -398,7 +441,6 @@ void Bluetooth::wakeup()
   }
 
   tmr10ms_t now = get_tmr10ms();
-
   if (now < wakeupTime)
     return;
 
@@ -431,7 +473,6 @@ void Bluetooth::wakeup()
     bluetoothInit(BLUETOOTH_FACTORY_BAUDRATE, true);
     state = BLUETOOTH_STATE_FACTORY_BAUDRATE_INIT;
   }
-
   if (state == BLUETOOTH_STATE_FACTORY_BAUDRATE_INIT) {
     writeString("AT+BAUD4");
     state = BLUETOOTH_STATE_BAUDRATE_SENT;

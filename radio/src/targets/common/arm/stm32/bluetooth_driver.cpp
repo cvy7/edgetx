@@ -66,6 +66,9 @@ void bluetoothInit(uint32_t baudrate, bool enable)
 #if defined(BT_PWR_GPIO)
   gpio_init(BT_PWR_GPIO, GPIO_OUT, GPIO_PIN_SPEED_LOW);
 #endif
+#if defined(BT_CMD_MODE_GPIO)
+  gpio_init(BT_CMD_MODE_GPIO, GPIO_OUT, GPIO_PIN_SPEED_LOW);
+#endif
 
 #if !defined(BOOT)
   etx_serial_init cfg = {
@@ -88,6 +91,9 @@ void bluetoothInit(uint32_t baudrate, bool enable)
 #endif
 #if defined(BT_PWR_GPIO)
   gpio_set(BT_PWR_GPIO);
+#endif
+#if defined(BT_CMD_MODE_GPIO)
+  gpio_set(BT_CMD_MODE_GPIO);
 #endif
 }
 
