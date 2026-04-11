@@ -109,6 +109,11 @@ extern "C" void SDRAM_Init();
 #define EXTERNAL_MODULE_PWR_OFF         EXTERNAL_MODULE_OFF
 #define BLUETOOTH_MODULE_ON()           gpio_clear(BLUETOOTH_ON_GPIO)
 #define BLUETOOTH_MODULE_OFF()          gpio_set(BLUETOOTH_ON_GPIO)
+
+#define IS_BT_CONNECTED()               gpio_read(BT_CONNECTED_GPIO)
+#define BT_COMMAND_ON()                 gpio_clear(BT_CMD_MODE_GPIO)
+#define BT_COMMAND_OFF()                gpio_set(BT_CMD_MODE_GPIO)
+
 //#define IS_INTERNAL_MODULE_ON()         (false)
 //#define IS_EXTERNAL_MODULE_ON()         (gpio_read(EXTMODULE_PWR_GPIO) ? 1 : 0)
 
@@ -120,6 +125,8 @@ extern "C" void SDRAM_Init();
 #define EXTERNAL_MODULE_OFF()
 #define BLUETOOTH_MODULE_ON()
 #define BLUETOOTH_MODULE_OFF()
+#define BT_COMMAND_ON()
+#define BT_COMMAND_OFF()
 
 #endif // defined(SIMU)
 

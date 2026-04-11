@@ -273,9 +273,12 @@ endif()
 
 set(SRC ${SRC} sdcard.cpp rtc.cpp logs.cpp lib_file.cpp)
 
-if(BLUETOOTH)
-  add_definitions(-DBLUETOOTH)
-  set(SRC ${SRC} bluetooth.cpp)
+if(BLUETOOTH_LE)
+else()
+  if(BLUETOOTH)
+    add_definitions(-DBLUETOOTH)
+    set(SRC ${SRC} bluetooth.cpp)
+  endif()
 endif()
 
 if(SHUTDOWN_CONFIRMATION)

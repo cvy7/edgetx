@@ -24,7 +24,11 @@
 #include "form.h"
 #include "static.h"
 #include "button.h"
+#if defined(BLUETOOTH_LE)
+#include "bluetoothle.h"
+#else
 #include "bluetooth.h"
+#endif
 
 class BluetoothTrainerWindow : public Window
 {

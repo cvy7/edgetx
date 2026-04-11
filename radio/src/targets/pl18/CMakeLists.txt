@@ -75,6 +75,8 @@ elseif(PCBREV STREQUAL NV14)
     set(USE_VS1053B ON)
     set(AFHDS2 ON)
     set(AFHDS3 ON)
+    set(BLUETOOTH ON)
+    set(BLUETOOTH_LE ON)
 
     # defines existing internal modules
     set(INTERNAL_MODULES AFHDS2A CACHE STRING "Internal modules")
@@ -186,6 +188,12 @@ if(ROTARY_ENCODER)
   )
 endif()
 
+if(BLUETOOTH)
+  list(APPEND BOARD_COMMON_SRC
+    targets/common/arm/stm32/bluetooth_driver.cpp
+  )
+endif()
+
 if(DISK_CACHE)
   set(BOARD_COMMON_SRC ${BOARD_COMMON_SRC}
     disk_cache.cpp
@@ -256,6 +264,16 @@ set(SRC ${SRC}
   io/multi_firmware_update.cpp
   io/multi_protolist.cpp
 )
+
+if(BLUETOOTH_LE)
+add_definitions(-DBLUETOOTH)
+add_definitions(-DBLUETOOTH_LE)
+set(TARGET_SRC
+  ${TARGET_SRC}
+  bluetoothle.cpp
+  lierda_bt.cpp
+  )
+endif()
 
 if (MULTIMODULE)
   add_definitions(-DMULTI_PROTOLIST)

@@ -540,8 +540,11 @@ void RadioSdManagerPage::BootloaderUpdate(const char* fn)
 #if defined(BLUETOOTH)
 void RadioSdManagerPage::BluetoothFirmwareUpdate(const char* fn)
 {
+  #if defined (BLUETOOTH_LE)
+  #else
   auto dialog = new FlashDialog<Bluetooth>(bluetooth);
   dialog->flash(fn);
+  #endif
 }
 #endif
 
